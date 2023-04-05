@@ -1,8 +1,21 @@
 const { Command } = require("commander");
 const contacts = require("./contacts");
 
+const program = new Command();
+
+program
+  .option("-a, --action <type>", "choose action")
+  .option("-i, --id <type>", "user id")
+  .option("-n, --name <type>", "user name")
+  .option("-e, --email <type>", "user email")
+  .option("-p, --phone <type>", "user phone");
+
+program.parse(process.argv);
+
+const argv = program.opts();
+
 async function invokeAction({ action, id, name, email, phone }) {
-  switch (action) {
+  switch(action) {
     case "list":
           const listContacts = await contacts.listContacts();
           console.log(listContacts);
@@ -14,7 +27,7 @@ async function invokeAction({ action, id, name, email, phone }) {
       break;
 
     case "add":
-          const newContact = await contacts.addContact({ name, email, phone });
+          const newContact = await contacts.addContact(name, email, phone);
           console.log(newContact);
       break;
 
@@ -27,17 +40,5 @@ async function invokeAction({ action, id, name, email, phone }) {
       console.warn("\x1B[31m Unknown action type!");
   }
 }
-const program = new Command();
 
-
-program
-  .option("-a, --action <type>", "choose action")
-  .option("-i, --id <type>", "user id")
-  .option("-n, --name <type>", "user name")
-  .option("-e, --email <type>", "user email")
-  .option("-p, --phone <type>", "user phone");
-
-program.parse(process.argv);
-
-const argv = program.opts();
 invokeAction(argv);
