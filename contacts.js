@@ -8,12 +8,8 @@ const contactsPath = path.join(__dirname, "db", "contacts.json");
 
  
 async function listContacts() {
-    let contacts;
-     await fs
-       .readFile(contactsPath, "utf-8")
-       .then((data) => (contacts = JSON.parse(data)))
-       .catch((error) => console.log(error));
-     return contacts;
+     const data = await fs.readFile(contactsPath, "utf-8").then((data) => (data = JSON.parse(data))).catch((error) => console.log(error));
+     return data;
 };
 
 
@@ -54,11 +50,11 @@ async function addContact(name, email, phone) {
     return newContact;
 }
 
-const contacts = {
+const contactsAction = {
     listContacts,
     getContactById,
     removeContact,
     addContact,
 };
 
-module.exports = contacts;
+module.exports = contactsAction;
